@@ -16,10 +16,35 @@ def small_calc(goal_cents):
     return (pennies + nickles + dimes)
 
 
-# def total_calc(goal_cents):
+def total_calc(goal_cents):
+#return all possible ways of making goal cents
+    result_set = set()
+    max_dimes = goal_cents//10
+    max_nickles = goal_cents//5
+
+    print(max_dimes)
+    for i in range(max_dimes + 1):
+        dime_amt = ((max_dimes -i)*10)
+        dime_cnt = (dime_amt/10)
+        penny_cnt = ((goal_cents - dime_amt)%5)
+        nickle_cnt = ((goal_cents - dime_amt - penny_cnt)/5)
+        mix = f"{dime_cnt}/{nickle_cnt}/{penny_cnt}"
+        result_set.add(mix)
+    print(result_set)
+    for i in range(max_nickles + 1):
+        nickle_amt = ((max_nickles -i)*5)
+        nickle_cnt = (nickle_amt/5)
+        penny_cnt = ((goal_cents - nickle_amt)%10)
+        dime_cnt = ((goal_cents - nickle_amt - penny_cnt)/10)
+        mix = f"{dime_cnt}/{nickle_cnt}/{penny_cnt}"
+        result_set.add(mix)
+    print(result_set)
+
+
 
 
 # def mixed_calc(goal_cents):
 
 
-small_calc(244)
+small_calc(32)
+total_calc(32)
