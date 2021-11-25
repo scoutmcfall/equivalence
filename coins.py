@@ -70,5 +70,5 @@ def mixed_calc(result_lst):
 
 
 # small_calc(32)
-result_lst = total_calc(32)
+result_lst = total_calc(107)
 mixed_calc(result_lst)
