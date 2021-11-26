@@ -99,8 +99,34 @@
         }
     })
     // 3. fetch
-    fetch()=>{
+    function serverCall(arg){
+        return fetch("someUrlOnMyServer.php", {
+            data: {foo="someString"}
+        });
+    };
+    result = serverCall("someString").then((someValueFromServer)=>{
+        console.log(someValueFromServer);
+        return someValueFromServer.json();
+    })
+    .then((someJsonObject)=>{
+        console.log(someJsonObject);
+    })
+    .then((valueFromSecondHandler)=>{
+        console.log(valueFromSecondHandler);
+    });
 
+    // 4. use a library! like axios 
+    async function(){
+        const response = await serverCall();
+        const json = response.json();
+        const nextValue = json.someKey;
+        console.log(nextValue);
     }
+
+    // 5. if you know what errors you want to anticipate, you can add .catch()
+    //in your .then chain that will catch the error instead of proceeding to
+    //the next step in your chain
+
+    
 
         
