@@ -1,3 +1,11 @@
+
+// {so there's basically three ways to make the request:
+// 1. new XMLHttpRequest(), which never fails but no one uses,
+// 2. jquery, which you'll see everywhere
+// 3.using the fetch method inside the return statement of a function
+// note: you can add .then listeners onto the result variable from a fetch function, or 
+// use a wrapper function that assigns a variable to the returned server data from an outer function}
+
 // # Ways to make an ajax request
 
 // 1. Super old way. Never fails. No one uses it anymore: new XMLHttpRequest()
@@ -81,6 +89,53 @@
     	
 //     }
 
+
+// 1. new XMLHttpRequest()
+// 2. jQuery
+$.ajax({
+    method: "GET",
+    url: ("myServer.php"),
+    data: {foo="someString"},
+    complete: function(){
+    }
+})
+//with jquery, you just call .ajax and pass it the info it needs, 
+//then tell it what to do once it's complete
+
+// 3. fetch()
+function serverCall(arg){
+    return fetch("myServer.php",{
+        data: {foo="someString"}
+    });
+}
+
+results = serverCall(arg).then((someServerData)=>{
+        console.log(someServerData);
+        return someServerData.json();
+    })
+    .then((someJsonObject)=>{
+        console.log(someJsonObject);
+    })
+    .then((valueSecondHandler)=>{
+        console.log(valueSecondHandler);
+    });
+//so with fetch, you call it inside the return statement of a function, passing it the 
+//url and the {data} as arguments, then call the function, assigning the result to a variable
+//and you can chain ".then" s that take in a value => another function that dones something
+
+
+4. axios library (async await)
+async function(){
+    const response = await serverCall();
+    const json = response.json;
+    const nextValue = json.someKey;
+    console.log(nextValue);
+}
+//using the axios library, i create an async function, that calls the serverCall function above, 
+//and this is basically an event listener that makes sure that certain things don't run 
+//until the data is returned from the server?
+
+//*********************************************** */
 
 // Ways to make an api call with js:
 // 1. new XMLHttpRequest()
