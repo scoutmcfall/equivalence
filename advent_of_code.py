@@ -40,11 +40,35 @@ def final_len_depth(lst):
             d+= int(line[-2])
     return l, d
 
-print(final_len_depth(data))
+print(final_len_depth(data2))
 
 def final_pos(l,d):
     return l * d
 
 print(final_pos(1911,724))
 
+# down X increases your aim by X units.
+# up X decreases your aim by X units.
+# forward X does two things:
+# It increases your horizontal position by X units.
+# It increases your depth by your aim multiplied by X.
+
+def track_aim(lst):
+    l = 0
+    d = 0
+    a = 0
+    for line in data2:
+        if line[0] == "f":
+            l+= int(line[-2])
+            d+= (a * int(line[-2]))
+        
+        if line[0] == "u":
+            a -= int(line[-2])
+
+        if line[0] == "d":
+            a+= int(line[-2])
+    return l, d, a
+    
+print(track_aim(data2))
+print(final_pos(1911, 778813))
 
