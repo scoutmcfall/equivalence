@@ -133,20 +133,44 @@ final_gamma = calc_gamma_ep(data3)[0]
 #1508
 #2587 => 3901196
 # 010111100100
-def find_ox(dta):
-    dta = str(dta)
-    final_gamma = "010111100100"
-    while final_gamma:
-        current = re.findall(final_gamma, dta)
-        if len(current)==1:
-            return current
-        # final_gamma.pop(-1)
-        final_gamma = final_gamma[:-1]
-        # print("line 145" + final_gamma)
-    return current
-print(find_ox(data3))
-    
-    
+def find_closest(search_string, dta):
+    #get the index of the biggest i and get the corresponding value in the dta
+    closeness_lst = []
+    for line in dta:
+        for i in range(12):
+            if search_string[:i] != line[:i]:
+                closeness_lst.append(i)
+    search_closest = max(closeness_lst)
+    # print(search_closest)
+    #i want the index of where the max is in my closest list and then i can get the value from my dta
+
+    for i in range(len(closeness_lst)):
+        if closeness_lst[i] == search_closest:
+            final_index = i
+            return dta[i]
+
+
+# If 0 and 1 are equally common, keep values with a 1 in the position being considered.
+print("all options for the ox rating:")
+print(find_closest("010111100100", data3))
+print(find_closest("110111100100", data3))
+
+print("all options for the co2 rating:")
+print(find_closest("101000011011", data3))
+print(find_closest("001000011011", data3))
+print(find_closest("000000011011", data3))
+
+ox = [94, 163]
+co2 = [163, 3748, 1639]
+
+def calc(l1, l2):
+    results = []
+    for num in l1:
+        for num2 in l2:
+            results.append(num*num2)
+    return results
+print(calc(ox, co2))
+#[15322, 352312, 154066, 26569, 610924]
 
 
 
@@ -155,31 +179,9 @@ print(find_ox(data3))
 
 
 
-# def find_ox(data, gamma):
-    #compare each line to gamma (bit by bit) and keep nums with 
-    #the same num in the right position
-    #stop when there's only 1 number left
-#     current = []
-    
-#     for line in data:
-#         if line[0] == gamma[0]:
-#             current.append(line)
-#         #at this point I have compared the 
-#         #first digit and if i only have 1 left i should just go with that one
-#     if len(current)<2:
-#         return current
-#     else:
-#         for i in range(len(current)):
-#             if current[i][1] != gamma[1]:
-#                 current.pop(i)
-#     if len(current)<2:
-#         return current
-#     else:
-#         for i in range(len(current)):
-#             if current[i][2] != gamma[2]:
-#                 current.pop(i)
-#     return current
 
-# print(find_ox(data3, final_gamma))
+# 11
+# 000001011110 = 94
 
-# def find_scrub(data, epsilon):
+# 11
+# 000010100011 = 163
