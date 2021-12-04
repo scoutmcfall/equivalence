@@ -1,4 +1,4 @@
-
+import numpy as np
 import statistics
 from statistics import mode
 import re
@@ -155,14 +155,8 @@ def find_closest(search_string, dta):
 #4412188
 
 with open("./input4.csv", 'r') as bingo:
-    data4 = bingo.readlines()
-
-bingo_nums = [28,82,77,88,95,55,62,21,99,14,30,9,97,
-92,94,3,60,22,18,86,78,71,61,43,79,33,65,81,26,49,47,
-51,0,89,57,75,42,35,80,1,46,83,39,53,40,36,54,70,76,38,
-50,23,67,2,20,87,37,66,84,24,98,4,7,12,44,10,29,5,48,59,
-32,41,90,17,56,85,96,93,27,74,45,25,15,6,69,16,19,8,31,
-13,64,63,34,73,58,91,11,68,72,52]
+    data4 = bingo.read()
+print(type(data4))
 
 #zip the bingo nums list into a bunch of sets of 5?
 
@@ -188,5 +182,19 @@ bingo_nums = [28,82,77,88,95,55,62,21,99,14,30,9,97,
 
 #which board will win first and what is the score of that board?
 
+def bingo(DATA):
+    data = DATA.strip().split('\n\n')
+    sequence = map(int, data[0].split(","))
+    boards_ar = np.array([[list(map(int,line.split())) for line in board.split("\n")] for board in data[1:] if board])
+    t_boards_ar = np.array(list(map(lambda x: x.T, boards_ar)))
+    boards = boards_ar.tolist()+t_boards_ar.tolist()
+    for num in sequence:
+        for board in boards:
+            for row in board:
+                if num in row:
+                    row.remove(num)
 
+            if not all(board):
+                return sum([x for row in board for x in row])*num
 
+print(bingo(data4))
