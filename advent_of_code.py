@@ -107,6 +107,7 @@ def calc_gamma_ep(lst):
         pos10.append(line[9])
         pos11.append(line[10])
         pos12.append(line[11])
+    #could sort the lists and then take the middle value
     final_gamma.append(mode(pos1))
     final_gamma.append(mode(pos2))
     final_gamma.append(mode(pos3))
@@ -151,37 +152,41 @@ def find_closest(search_string, dta):
 
 
 # If 0 and 1 are equally common, keep values with a 1 in the position being considered.
-print("all options for the ox rating:")
-print(find_closest("010111100100", data3))
-print(find_closest("110111100100", data3))
+#4412188
 
-print("all options for the co2 rating:")
-print(find_closest("101000011011", data3))
-print(find_closest("001000011011", data3))
-print(find_closest("000000011011", data3))
+with open("./input4.csv", 'r') as bingo:
+    data4 = bingo.readlines()
 
-ox = [94, 163]
-co2 = [163, 3748, 1639]
+bingo_nums = [28,82,77,88,95,55,62,21,99,14,30,9,97,
+92,94,3,60,22,18,86,78,71,61,43,79,33,65,81,26,49,47,
+51,0,89,57,75,42,35,80,1,46,83,39,53,40,36,54,70,76,38,
+50,23,67,2,20,87,37,66,84,24,98,4,7,12,44,10,29,5,48,59,
+32,41,90,17,56,85,96,93,27,74,45,25,15,6,69,16,19,8,31,
+13,64,63,34,73,58,91,11,68,72,52]
 
-def calc(l1, l2):
-    results = []
-    for num in l1:
-        for num2 in l2:
-            results.append(num*num2)
-    return results
-print(calc(ox, co2))
-#[15322, 352312, 154066, 26569, 610924]
+#zip the bingo nums list into a bunch of sets of 5?
 
-
-
-
-
-
+# 5x5
+# so the winning sequences would either be 1 apart in position or 5 apart in position
+#how to split up each board? 
+#data4 is a list of lists
+#it would be nice to have each board as a dictionary inside a list of them
+# def create_boards(dta):
+#     boards = {}
+#     for line in dta:
+#         for nums in line:
+#             boards[line]
 
 
+# def bingo():
+    #given a string of numbers and a bingo board, determine if the board wins
 
-# 11
-# 000001011110 = 94
 
-# 11
-# 000010100011 = 163
+# def calc_score():
+    #sum all unmarked numbers
+    #mult that sum by the number that was called when the board won
+
+#which board will win first and what is the score of that board?
+
+
+
