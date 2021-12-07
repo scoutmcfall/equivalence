@@ -1,58 +1,29 @@
-from collections import Counter, deque
+def get_data(filename):
+    with open("./input6.csv") as file:
+        return [int(x) for x in file.read().split(",")]
 
-with open("input3.csv", "r") as file:
-    raw_data = [line.strip() for line in file]
 
-# Part 1
-counters = [Counter() for _ in range(12)]
-for i in range(12):
-    for line in raw_data:
-        counters[i].update((line[~i],))
+def simulate(fish_ages):
+    count = [fish_ages.count(i) for i in range(9)]
+    result_at_day_80 = 0
+    for day in range(1, 256+1):
+        zeros = count[0]
+        count[:-1] = count[1:]
+        count[6] += zeros
+        count[8] = zeros
+        if day == 80:
+            result_at_day_80 = sum(count)
+    return result_at_day_80, sum(count)
 
-gamma = 0
-epsilon = 0
-for j in range(12):
-    most_common = counters[j].most_common()
-    gamma |= int(most_common[0][0]) << j
-    epsilon |= int(most_common[1][0]) << j
 
-print(gamma * epsilon)
+sample_data = get_data("../../input/2021-06-sample.txt")
+challenge_data = get_data("../../input/2021-06-input.txt")
 
-# Part 2
+if __name__ == "__main__":
+    # sample_part_1, sample_part_2 = simulate(sample_data)
+    # assert sample_part_1 == 5934
+    # assert sample_part_2 == 26984457539
 
-data_dict = {ID: value for ID, value in enumerate(raw_data)}
-
-def process_data(data:dict, mode:str) -> int:    
-    my_data = data.copy()
-
-    for i in range(12):
-        bit_count = Counter()
-        to_remove = (deque(), deque())
-
-        for ID, value in my_data.items():
-            bit = int(value[i])
-            bit_count.update((bit,))
-            to_remove[bit].append(ID)
-
-        if mode == "most":
-            most = 1 if bit_count[1] >= bit_count[0] else 0
-            while to_remove[most]:
-                index = to_remove[most].popleft()
-                del my_data[index]
-                if len(my_data) == 1: break
-
-        elif mode == "least":
-            least = 0 if bit_count[0] <= bit_count[1] else 1
-            while to_remove[least]:
-                index = to_remove[least].popleft()
-                del my_data[index]
-                if len(my_data) == 1: break
-
-        if len(my_data) == 1:
-            (ID, value), = my_data.items()
-            return int(value, 2)
-
-O2_value = process_data(data_dict, "most")
-CO2_value = process_data(data_dict, "least")
-
-print(O2_value * CO2_value)
+    challenge_part_1, challenge_part_2 = simulate(challenge_data)
+    print(challenge_part_1)  # 372300
+    print(challenge_part_2)  # 1675781200288

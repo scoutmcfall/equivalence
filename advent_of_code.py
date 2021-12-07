@@ -154,47 +154,106 @@ def find_closest(search_string, dta):
 # If 0 and 1 are equally common, keep values with a 1 in the position being considered.
 #4412188
 
-with open("./input4.csv", 'r') as bingo:
-    data4 = bingo.read()
-print(type(data4))
-
-#zip the bingo nums list into a bunch of sets of 5?
-
-# 5x5
-# so the winning sequences would either be 1 apart in position or 5 apart in position
-#how to split up each board? 
-#data4 is a list of lists
-#it would be nice to have each board as a dictionary inside a list of them
-# def create_boards(dta):
-#     boards = {}
-#     for line in dta:
-#         for nums in line:
-#             boards[line]
-
-
-# def bingo():
-    #given a string of numbers and a bingo board, determine if the board wins
-
-
-# def calc_score():
-    #sum all unmarked numbers
-    #mult that sum by the number that was called when the board won
+with open("./input5.csv", 'r') as bingo:
+    data4 = bingo.read() #reads it into a string
 
 #which board will win first and what is the score of that board?
 
-def bingo(DATA):
+def bingo0(DATA):
+    #split all the input data by double space
     data = DATA.strip().split('\n\n')
+    #isolate the called bingo numbers at the beginning
     sequence = map(int, data[0].split(","))
+    #make each line in each board a list
     boards_ar = np.array([[list(map(int,line.split())) for line in board.split("\n")] for board in data[1:] if board])
+    #transpost the columns in each board into lists
     t_boards_ar = np.array(list(map(lambda x: x.T, boards_ar)))
     boards = boards_ar.tolist()+t_boards_ar.tolist()
+    print(boards)
+    #iterate through each num in the sequence, removing the number from the row list
     for num in sequence:
         for board in boards:
             for row in board:
                 if num in row:
                     row.remove(num)
-
+            #if the board is missing any values (they've been called, return the sum for the board)
+            #print(board)
             if not all(board):
+                print(board)
                 return sum([x for row in board for x in row])*num
 
-print(bingo(data4))
+#print(bingo(data4))
+
+with open('./input4.csv') as file:
+    lines = [line.rstrip() for line in file.readlines()]
+n = [28,82,77,88,95,55,62,21,99,14,30,9,97,92,94,3,60,22,18,86,78,71,61,43,79,33,65,81,26,49,47,51,0,89,57,75,42,35,80,1,46,83,39,53,40,36,54,70,76,38,50,23,67,2,20,87,37,66,84,24,98,4,7,12,44,10,29,5,48,59,32,41,90,17,56,85,96,93,27,74,45,25,15,6,69,16,19,8,31,13,64,63,34,73,58,91,11,68,72,52]
+
+class Bingo():
+    def __init__(self, board):
+        self.board = [x.split() for x in board]
+
+    def mark(self, n):
+        for row in self.board:
+            for i, item in enumerate(row): 
+                if item == n:
+                    row[i] = 'X'
+
+    def has_won(self):
+        for x in range(len(self.board)):
+            col, row = 0, 0
+            for y in range(len(self.board)):
+                col += int(self.board[y][x] == 'X')
+                row += int(self.board[x][y] == 'X')
+            if col == 5 or row == 5: 
+                return True
+        return False
+
+    def get_score(self):
+        score = 0 
+        for row in self.board: 
+            for item in row: 
+                score += int(item) if item != 'X' else 0
+        return score
+
+
+#day 5:
+d = [[int(x) for x in l.replace(" -> "," ").replace(","," ").split()] for l in open("./input5.csv","rt")]
+a = {}
+b = {}
+for x1,y1,x2,y2 in d:
+  if x1==x2:
+    if y1>y2: y1,y2=y2,y1
+    for y in range(y1,y2+1):
+      a[(x1,y)]=a.get((x1,y),0)+1
+      b[(x1,y)]=b.get((x1,y),0)+1
+  elif y1==y2:
+    if x1>x2: x1,x2=x2,x1
+    for x in range(x1,x2+1):
+      a[(x,y1)]=a.get((x,y1),0)+1
+      b[(x,y1)]=b.get((x,y1),0)+1
+  else:
+    if x1>x2: x1,x2, y1,y2 = x2,x1, y2,y1
+    for x in range(x1,x2+1):
+      if y2>y1: y = y1+(x-x1)
+      else:     y = y1-(x-x1)
+      b[(x,y)]=b.get((x,y),0)+1
+print( sum(v>1 for v in a.values()) )
+print( sum(v>1 for v in b.values()) )
+
+
+#day 6:
+with open("./input6.csv") as file:
+    return [int(x) for x in file.read().split(",")]
+
+
+def simulate(fish_ages):
+    count = [fish_ages.count(i) for i in range(9)]
+    result_at_day_80 = 0
+    for day in range(1, 256+1):
+        zeros = count[0]
+        count[:-1] = count[1:]
+        count[6] += zeros
+        count[8] = zeros
+        if day == 80:
+            result_at_day_80 = sum(count)
+    return result_at_day_80, sum(count)
