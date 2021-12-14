@@ -1,6 +1,6 @@
 import numpy as np
 import statistics
-from statistics import mode
+from statistics import mode, median
 import re
 
 with open("./input.csv", 'r') as depths:
@@ -243,7 +243,7 @@ print( sum(v>1 for v in b.values()) )
 
 #day 6:
 with open("./input6.csv") as file:
-    return [int(x) for x in file.read().split(",")]
+    ages = [int(x) for x in file.read().split(",")]
 
 
 def simulate(fish_ages):
@@ -257,3 +257,20 @@ def simulate(fish_ages):
         if day == 80:
             result_at_day_80 = sum(count)
     return result_at_day_80, sum(count)
+
+#day 7:
+with open("./input7.csv") as file:
+    positions =  [int(x) for x in file.read().split(",")]
+print("**********************")
+print(median(positions))
+print(mode(positions))
+def least_fuel(x_positions):
+    fuel_cnt = 0
+    for num in x_positions:
+        fuel_cnt += abs(num - 330)
+    return fuel_cnt
+#in my case it was just the median value that was the most efficient?
+
+print(least_fuel(positions))
+
+

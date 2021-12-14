@@ -1,29 +1,20 @@
-def get_data(filename):
-    with open("./input6.csv") as file:
-        return [int(x) for x in file.read().split(",")]
+from pathlib import Path
 
 
-def simulate(fish_ages):
-    count = [fish_ages.count(i) for i in range(9)]
-    result_at_day_80 = 0
-    for day in range(1, 256+1):
-        zeros = count[0]
-        count[:-1] = count[1:]
-        count[6] += zeros
-        count[8] = zeros
-        if day == 80:
-            result_at_day_80 = sum(count)
-    return result_at_day_80, sum(count)
+def calculate_central_position(crab_positions, part2=True):
+    crab_distance_to_index = list(map(lambda i: list(map(lambda index: abs(i[0] - index), crab_positions)), enumerate(crab_positions)))
+    if part2:
+        total_fuel_list = list(map(lambda crabs: sum(int((i**2+i)/2) for i in crabs), crab_distance_to_index))
+    else:
+        total_fuel_list = list(map(sum, crab_distance_to_index))
+    least_fuel = min(total_fuel_list)
+    central_position = total_fuel_list.index(least_fuel)
+    return central_position, least_fuel
 
 
-sample_data = get_data("../../input/2021-06-sample.txt")
-challenge_data = get_data("../../input/2021-06-input.txt")
+def get_crab_positions(file: Path):
+    return list(map(int, file.read_text().strip().split(',')))
 
-if __name__ == "__main__":
-    # sample_part_1, sample_part_2 = simulate(sample_data)
-    # assert sample_part_1 == 5934
-    # assert sample_part_2 == 26984457539
 
-    challenge_part_1, challenge_part_2 = simulate(challenge_data)
-    print(challenge_part_1)  # 372300
-    print(challenge_part_2)  # 1675781200288
+if __name__ == '__main__':
+    print(calculate_central_position(get_crab_positions(file=Path('./input7.csv'))))
